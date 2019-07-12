@@ -1,6 +1,6 @@
 ﻿namespace XBIMApp
 {
-    partial class axForm
+    partial class Ifc2x3frm
     {
         /// <summary>
         /// Required designer variable.
@@ -38,7 +38,6 @@
             this.btnChooseDoor = new System.Windows.Forms.Button();
             this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
             this.label3 = new System.Windows.Forms.Label();
-            this.checkBox1 = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -140,24 +139,11 @@
             this.label3.TabIndex = 7;
             this.label3.Text = "门窗落在墙内距离阈值（m）";
             // 
-            // checkBox1
-            // 
-            this.checkBox1.AutoSize = true;
-            this.checkBox1.Checked = true;
-            this.checkBox1.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBox1.Location = new System.Drawing.Point(427, 139);
-            this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(89, 19);
-            this.checkBox1.TabIndex = 11;
-            this.checkBox1.Text = "生成门窗";
-            this.checkBox1.UseVisualStyleBackColor = true;
-            // 
-            // axForm
+            // Ifc2x3frm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(712, 607);
-            this.Controls.Add(this.checkBox1);
             this.Controls.Add(this.numericUpDown1);
             this.Controls.Add(this.listBox1);
             this.Controls.Add(this.btnGenerate);
@@ -168,7 +154,7 @@
             this.Controls.Add(this.textBox1);
             this.Controls.Add(this.btnChooseDoor);
             this.Controls.Add(this.btnChooseWallLines);
-            this.Name = "axForm";
+            this.Name = "Ifc2x3frm";
             this.Text = "IFC模型生成";
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
             this.ResumeLayout(false);
@@ -188,6 +174,5 @@
         private System.Windows.Forms.Button btnChooseDoor;
         private System.Windows.Forms.NumericUpDown numericUpDown1;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.CheckBox checkBox1;
     }
 }

@@ -161,12 +161,18 @@ namespace XBIMApp
 	        Vector2d u=new Vector2d(tmpS1);
             Vector2d tmpS2=S2.target-S2.source;
 	        Vector2d v=new Vector2d(tmpS2);
-	        Vector2d w = S1.source - S2.source;
-	        double D = perp(u, v);
-            if (Math.Abs(D) < SMALL_NUM_1)
-	        {
-		        return true;
-	        }
+            double angletest = AxMath.dot(u.ToVector3d(),v.ToVector3d()) / (norm(u.ToVector3d())*norm(v.ToVector3d()));//夹角cos值
+
+            if (angletest > Math.Cos(10 * Math.PI / 180) || angletest < Math.Cos(170 * Math.PI / 180))//平行？
+            {
+                return true;
+            }
+            //Vector2d w = S1.source - S2.source;
+            //double D = perp(u, v);
+            //if (Math.Abs(D) < SMALL_NUM_1)
+            //{
+            //    return true;
+            //}
 	        return false;
         }
     }

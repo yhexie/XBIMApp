@@ -13,6 +13,7 @@ namespace XBIMApp
         public double m_MinZ;
         public double m_MaxZ;
         public double m_Thickness;
+        public int IsDoor;
 
         public int WallId_0=-1;
         public AxSegment2 getLineSegment()

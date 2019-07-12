@@ -6,30 +6,31 @@ using System.Threading.Tasks;
 using Xbim.Common;
 using Xbim.Common.Step21;
 using Xbim.Ifc;
+using Xbim.Ifc2x3;
 using Xbim.IO;
-using Xbim.Ifc4.ActorResource;
-using Xbim.Ifc4.DateTimeResource;
-using Xbim.Ifc4.ExternalReferenceResource;
-using Xbim.Ifc4.PresentationOrganizationResource;
-using Xbim.Ifc4.GeometricConstraintResource;
-using Xbim.Ifc4.GeometricModelResource;
-using Xbim.Ifc4.GeometryResource;
-using Xbim.Ifc4.Interfaces;
-using Xbim.Ifc4.Kernel;
-using Xbim.Ifc4.MaterialResource;
-using Xbim.Ifc4.MeasureResource;
-using Xbim.Ifc4.ProductExtension;
-using Xbim.Ifc4.ProfileResource;
-using Xbim.Ifc4.PropertyResource;
-using Xbim.Ifc4.QuantityResource;
-using Xbim.Ifc4.RepresentationResource;
-using Xbim.Ifc4.SharedBldgElements;
+using Xbim.Ifc2x3.ActorResource;
+using Xbim.Ifc2x3.DateTimeResource;
+using Xbim.Ifc2x3.ExternalReferenceResource;
+using Xbim.Ifc2x3.PresentationOrganizationResource;
+using Xbim.Ifc2x3.GeometricConstraintResource;
+using Xbim.Ifc2x3.GeometricModelResource;
+using Xbim.Ifc2x3.GeometryResource;
+using Xbim.Ifc2x3.Interfaces;
+using Xbim.Ifc2x3.Kernel;
+using Xbim.Ifc2x3.MaterialResource;
+using Xbim.Ifc2x3.MeasureResource;
+using Xbim.Ifc2x3.ProductExtension;
+using Xbim.Ifc2x3.ProfileResource;
+using Xbim.Ifc2x3.PropertyResource;
+using Xbim.Ifc2x3.QuantityResource;
+using Xbim.Ifc2x3.RepresentationResource;
+using Xbim.Ifc2x3.SharedBldgElements;
 using MapTools;
 using System.Runtime.InteropServices;
 
 namespace XBIMApp
 {
-    class AxIndoorIfcCreatorEx
+    class AxIndoorIfcCreatorIfc2x3
     {
         List<AxWallLine> m_WallPolylines;
         List<AxDoor> m_DoorPolylines;
@@ -38,7 +39,6 @@ namespace XBIMApp
         string m_doorFileName;
         double m_MinX=0;
         double m_MinY=0;
-        bool checkDoorCreate = false;
         public void setWallFile(string wall_file)
         {
             m_wallFileName = wall_file;
@@ -46,10 +46,6 @@ namespace XBIMApp
         public void setDoorFile(string door_file)
         {
             m_doorFileName = door_file;
-        }
-        public void setcheckDoorCreate(bool ischk)
-        {
-            checkDoorCreate = ischk;
         }
         public void setDist_Wall_Threshold(double threshold_)
         {
@@ -121,14 +117,8 @@ namespace XBIMApp
         //读取门窗文件
         private void ReadDoorLinesSHP(string FILENAME)
         {
-            IntPtr hShp = ShapeLib.SHPOpen(FILENAME, "rb+");
-            IntPtr hDbf = ShapeLib.DBFOpen(FILENAME,"r+");
-            if (hDbf.Equals(IntPtr.Zero))
-            {
-                Console.WriteLine("Error:  Unable to create {0}.dbf!", FILENAME);
-                return;
-            }
-            int iIsDoor = ShapeLib.DBFGetFieldIndex(hDbf, "IsDoor");
+            IntPtr hShp;
+            hShp = ShapeLib.SHPOpen(FILENAME, "rb+");
             m_DoorPolylines = new List<AxDoor>();
             // get shape info and verify shapes were created correctly
             double[] minB = new double[4];
@@ -145,7 +135,9 @@ namespace XBIMApp
                 IntPtr pshpObj = ShapeLib.SHPReadObject(hShp, iShape);
                 AxPolyline2d plline = new AxPolyline2d();
                 ShapeLib.SHPObject shpObj = new ShapeLib.SHPObject();
-                Marshal.PtrToStructure(pshpObj, shpObj);          
+                Marshal.PtrToStructure(pshpObj, shpObj);
+
+             
                 int parts = shpObj.nParts;
               
                 if (parts > 0)
@@ -170,15 +162,12 @@ namespace XBIMApp
                         Vector2d pt = new Vector2d(x * 1000, y * 1000);
                         plline.polyline.Add(pt);//
                     }
-                    int isDoor = 1;
-                    isDoor = ShapeLib.DBFReadIntegerAttribute(hDbf, iShape, iIsDoor);
                     AxDoor door = new AxDoor();
                     door.Id = 2000 + i;
                     door.m_Polyline = plline;
                     door.m_MaxZ = 3000;
                     door.m_MinZ = 0;
                     door.m_Thickness = 100;
-                    door.IsDoor = isDoor;
                     m_DoorPolylines.Add(door);
                 }
                 ShapeLib.SHPDestroyObject(pshpObj);
@@ -192,10 +181,6 @@ namespace XBIMApp
         {
             ReadWallLinesSHP(m_wallFileName);
             ReadDoorLinesSHP(m_doorFileName);
-            if (checkDoorCreate== false)
-            {
-                m_DoorPolylines.Clear();
-            }
             //判断门在墙上
             List<AxDoor> m_Unique_Doors = new List<AxDoor>();
             if (m_DoorPolylines.Count > 0)
@@ -250,9 +235,8 @@ namespace XBIMApp
                 for (int k = 0; k < m_WallPolylines.Count; k++)
                 {
                     AxWallLine wallTmp = m_WallPolylines[k];
-                    List<Vector2d> wallPts=wallTmp.m_Polyline.polyline;
                     //门和墙平行，门投影在墙上，门的端点和中点投影落在墙上
-                    AxSegment2 wallSeg = new AxSegment2(wallPts[0], wallPts[wallPts.Count-1]);
+                    AxSegment2 wallSeg = new AxSegment2(wallTmp.m_Polyline.polyline[0], wallTmp.m_Polyline.polyline[0]);
                     double min_wall_x = Math.Min(wallSeg.source.X, wallSeg.target.X);
                     double max_wall_x = Math.Max(wallSeg.source.X, wallSeg.target.X);
                     double min_wall_y = Math.Min(wallSeg.source.Y, wallSeg.target.Y);
@@ -308,15 +292,8 @@ namespace XBIMApp
                                             if (door.Id == doorId)
                                             {
                                                 AxSegment2 seg=door.getLineSegment();
-                                                if (door.IsDoor == 1)
-                                                {
-                                                    IfcDoor ifc_door = CreateDoor(model, wall, seg.source.X, seg.source.Y, seg.target.X, seg.target.Y, 300, 2000);
-                                                    m_IfcDoors.Add(ifc_door);
-                                                }
-                                                else
-                                                {
-                                                    IfcWindow ifc_door = CreateWindow(model, wall, seg.source.X, seg.source.Y, seg.target.X, seg.target.Y, 300, 1000);
-                                                }
+                                                IfcDoor ifc_door = CreateDoor(model, wall, seg.source.X, seg.source.Y, seg.target.X, seg.target.Y, 300, 2000);
+                                                m_IfcDoors.Add(ifc_door);
                                                 break;
                                             }
                                         }
@@ -344,16 +321,8 @@ namespace XBIMApp
                                             if (door.Id == doorId)
                                             {
                                                 AxSegment2 seg = door.getLineSegment();
-                                                if (door.IsDoor==1)
-                                                {
-                                                    IfcDoor ifc_door = CreateDoor(model, wall, seg.source.X, seg.source.Y, seg.target.X, seg.target.Y, 300, 2000);
-                                                    m_IfcDoors.Add(ifc_door);
-                                                }
-                                                else
-                                                {
-                                                    IfcWindow ifc_door = CreateWindow(model, wall, seg.source.X, seg.source.Y, seg.target.X, seg.target.Y, 300, 1000);
-                                                }
-                                               
+                                                IfcDoor ifc_door = CreateDoor(model, wall, seg.source.X, seg.source.Y, seg.target.X, seg.target.Y, 300, 2000);
+                                                m_IfcDoors.Add(ifc_door);
                                                 break;
                                             }
                                         }
@@ -370,7 +339,8 @@ namespace XBIMApp
                             for (int i = 0; i < m_Walls.Count; i++)
                             {
                                 IfcWallStandardCase wall = m_Walls[i];
-                                building.AddElement(wall);
+                                
+                               // building.(wall);
                             }
                         }
                         if (m_IfcDoors.Count > 0)
@@ -378,7 +348,7 @@ namespace XBIMApp
                             for (int i = 0; i < m_IfcDoors.Count; i++)
                             {
                                 IfcDoor door = m_IfcDoors[i];
-                                building.AddElement(door);
+                                //building.(door);
                             }
                         }
                         txn.Commit();
@@ -425,7 +395,6 @@ namespace XBIMApp
                 //获取项目
                 var project = model.Instances.OfType<IfcProject>().FirstOrDefault();
                 project.AddBuilding(building);
-                
                 txn.Commit();
                 return building;
             }
@@ -454,7 +423,7 @@ namespace XBIMApp
             //那么先创建 IfcStore,IfcStore 是IFC4 格式存放在内存中而不是数据库
             //如果模型大于50MB的Ifc或者需要强大的事务处理，数据库在性能方面通常会更好
 
-            var model = IfcStore.Create(credentials, IfcSchemaVersion.Ifc4, XbimStoreType.InMemoryModel);
+            var model = IfcStore.Create(credentials, IfcSchemaVersion.Ifc2X3, XbimStoreType.InMemoryModel);
             // 启动事务、将所有的模型更改为 ACID
             using (var txn = model.BeginTransaction("Initialise Model"))
             {
@@ -464,8 +433,7 @@ namespace XBIMApp
                 //设置单位   这里是英制 
                 project.Initialize(ProjectUnits.SIUnitsUK);
                 project.Name = projectName;
-                var site = model.Instances.New<IfcSite>();
-                project.AddSite(site);
+
                 //提交修改
                 txn.Commit();
             }
@@ -754,8 +722,8 @@ namespace XBIMApp
 
                 var door = model.Instances.New<IfcDoor>();
                 door.Name = "A Door";
-                door.PredefinedType = IfcDoorTypeEnum.GATE;
-                door.OperationType = IfcDoorTypeOperationEnum.DOUBLE_SWING_LEFT;
+                //door.PredefinedType = IfcDoorTypeEnum.GATE;
+                //door.OperationType = IfcDoorTypeOperationEnum.DOUBLE_SWING_LEFT;
                 door.OverallHeight = 400;
                 door.OverallWidth = 400;
 
@@ -779,161 +747,7 @@ namespace XBIMApp
                 ////////////////////////////////////////////////////////////////////
                 var m_OpeningEle = model.Instances.New<IfcOpeningElement>();
                 m_OpeningEle.Name = "My Openings";
-                m_OpeningEle.PredefinedType = IfcOpeningElementTypeEnum.OPENING;
-
-                var rectOpening = model.Instances.New<IfcRectangleProfileDef>();
-                rectOpening.ProfileType = IfcProfileTypeEnum.AREA;
-                rectOpening.XDim = width;
-                rectOpening.YDim = length;
-                rectOpening.Position = model.Instances.New<IfcAxis2Placement2D>();
-                rectOpening.Position.Location = insertPoint;
-
-                //Openging模型拉伸
-                var body_Opeinging = model.Instances.New<IfcExtrudedAreaSolid>();
-                body_Opeinging.Depth = height;
-                body_Opeinging.SweptArea = rectOpening;
-                body_Opeinging.ExtrudedDirection = model.Instances.New<IfcDirection>();
-                body_Opeinging.ExtrudedDirection.SetXYZ(0, 0, 1);
-                //Openging旋转
-                body_Opeinging.Position = model.Instances.New<IfcAxis2Placement3D>();
-                body_Opeinging.Position.Location = origin;
-                body_Opeinging.Position.RefDirection = model.Instances.New<IfcDirection>();
-                body_Opeinging.Position.RefDirection.SetXYZ(-dy, dx, 0);
-                body_Opeinging.Position.Axis = model.Instances.New<IfcDirection>();
-                body_Opeinging.Position.Axis.SetXYZ(0, 0, 1);
-
-                var shape__Opeinging = model.Instances.New<IfcShapeRepresentation>();
-                var modelContext__Opeinging = model.Instances.OfType<IfcGeometricRepresentationContext>().FirstOrDefault();
-                shape__Opeinging.ContextOfItems = modelContext__Opeinging;
-                shape__Opeinging.RepresentationType = "SweptSolid";
-                shape__Opeinging.RepresentationIdentifier = "Body";
-                shape__Opeinging.Items.Add(body_Opeinging);
-
-                //创建产品定义并将模型几何添加到墙上
-                var rep_Opening = model.Instances.New<IfcProductDefinitionShape>();
-                rep_Opening.Representations.Add(shape__Opeinging);
-                m_OpeningEle.ObjectPlacement = lp_door;//位置相同
-                m_OpeningEle.Representation = rep_Opening;
-
-                var m_RelFills = model.Instances.New<IfcRelFillsElement>();
-                m_RelFills.RelatingOpeningElement = m_OpeningEle;
-                m_RelFills.RelatedBuildingElement = door;
-                var voidRel = model.Instances.New<IfcRelVoidsElement>();
-                voidRel.RelatedOpeningElement = m_OpeningEle;
-                voidRel.RelatingBuildingElement = wall;
-
-                var ifcPropertySingleValue = model.Instances.New<IfcPropertySingleValue>(psv =>
-                {
-                    psv.Name = "Reference";
-                    psv.Description = "Reference";
-                    psv.NominalValue = new IfcTimeMeasure(150.0);
-                    psv.Unit = model.Instances.New<IfcSIUnit>(siu =>
-                    {
-                        siu.UnitType = IfcUnitEnum.TIMEUNIT;
-                        siu.Name = IfcSIUnitName.SECOND;
-                    });
-                });
-                //设置模型元素数量
-                var ifcPropertySet = model.Instances.New<IfcPropertySet>(ps =>
-                {
-                    ps.Name = "Pset_DoorCommon";
-                    ps.Description = "Property Set";
-                    ps.HasProperties.Add(ifcPropertySingleValue);
-
-                });
-                //需建立关系
-                model.Instances.New<IfcRelDefinesByProperties>(
-                    rdbp =>
-                    {
-                        rdbp.Name = "Property Association";
-                        rdbp.Description = "IfcPropertySet associated to wall";
-                        rdbp.RelatedObjects.Add(door);
-                        rdbp.RelatingPropertyDefinition = ifcPropertySet;
-                    });
-
-                txn.Commit();
-                return door;
-            }
-
-        }
-
-        public IfcWindow CreateWindow(IfcStore model, IfcWallStandardCase wall, double fromX, double fromY, double toX, double toY, double width, double height)
-        {
-            //启动事务
-            using (var txn = model.BeginTransaction("Create Window"))
-            {
-                double length = Math.Sqrt((toX - fromX) * (toX - fromX) + (toY - fromY) * (toY - fromY));
-                double dx = toX - fromX;
-                double dy = toY - fromY;
-                double mid_x = (fromX + toX) / 2;
-                double mid_y = (fromY + toY) / 2;
-                var rectDoor = model.Instances.New<IfcRectangleProfileDef>();
-                rectDoor.ProfileType = IfcProfileTypeEnum.AREA;
-                rectDoor.XDim = width - 100;
-                rectDoor.YDim = length;
-
-                var insertPoint = model.Instances.New<IfcCartesianPoint>();
-                insertPoint.SetXY(0, 0); //在任意位置插入
-                rectDoor.Position = model.Instances.New<IfcAxis2Placement2D>();
-                rectDoor.Position.Location = insertPoint;
-
-                //门模型区域实心
-                var body_door = model.Instances.New<IfcExtrudedAreaSolid>();
-                body_door.Depth = height;
-                body_door.SweptArea = rectDoor;
-                body_door.ExtrudedDirection = model.Instances.New<IfcDirection>();
-                body_door.ExtrudedDirection.SetXYZ(0, 0, 1);
-
-                var origin = model.Instances.New<IfcCartesianPoint>();
-                origin.SetXYZ(0, 0, 0);
-                //拉伸对象，同时旋转
-                body_door.Position = model.Instances.New<IfcAxis2Placement3D>();
-                body_door.Position.Location = origin;
-                body_door.Position.RefDirection = model.Instances.New<IfcDirection>();
-                body_door.Position.RefDirection.SetXYZ(-dy, dx, 0);
-                body_door.Position.Axis = model.Instances.New<IfcDirection>();
-                body_door.Position.Axis.SetXYZ(0, 0, 1);
-
-                //创建一个定义形状来保存几何
-                var shape_door = model.Instances.New<IfcShapeRepresentation>();
-                var modelContext_door = model.Instances.OfType<IfcGeometricRepresentationContext>().FirstOrDefault();
-                shape_door.ContextOfItems = modelContext_door;
-                shape_door.RepresentationType = "SweptSolid";
-                shape_door.RepresentationIdentifier = "Body";
-                shape_door.Items.Add(body_door);
-
-                //创建产品定义并将模型几何添加到墙上
-                var rep_door = model.Instances.New<IfcProductDefinitionShape>();
-                rep_door.Representations.Add(shape_door);
-
-                var door = model.Instances.New<IfcWindow>();
-                door.Name = "A Door";
-                door.PredefinedType = IfcWindowTypeEnum.WINDOW;
-               
-                door.OverallHeight = 400;
-                door.OverallWidth = 400;
-
-                var lp_door = model.Instances.New<IfcLocalPlacement>();
-                var wallplace = wall.ObjectPlacement;
-
-
-                var origin2 = model.Instances.New<IfcCartesianPoint>();
-                origin2.SetXYZ(mid_x, mid_y, 1000);
-                var ax3D_door = model.Instances.New<IfcAxis2Placement3D>();
-                ax3D_door.RefDirection = model.Instances.New<IfcDirection>();
-                ax3D_door.RefDirection.SetXYZ(1, 0, 0);//x轴
-                ax3D_door.Axis = model.Instances.New<IfcDirection>();
-                ax3D_door.Axis.SetXYZ(0, 0, 1);//Z轴
-                ax3D_door.Location = origin2;
-                lp_door.RelativePlacement = ax3D_door;
-                //lp_door.PlacementRelTo = wallplace;//此处删除了
-                door.ObjectPlacement = lp_door;
-                door.Representation = rep_door;
-
-                ////////////////////////////////////////////////////////////////////
-                var m_OpeningEle = model.Instances.New<IfcOpeningElement>();
-                m_OpeningEle.Name = "My Openings";
-                m_OpeningEle.PredefinedType = IfcOpeningElementTypeEnum.OPENING;
+               // m_OpeningEle.PredefinedType = IfcOpeningElementTypeEnum.OPENING;
 
                 var rectOpening = model.Instances.New<IfcRectangleProfileDef>();
                 rectOpening.ProfileType = IfcProfileTypeEnum.AREA;
@@ -1058,19 +872,19 @@ namespace XBIMApp
                 //door.OverallWidth = 400;
                 var door = model.Instances.New<IfcWindow>();
                 door.Name = "A Door";
-                door.PredefinedType = IfcWindowTypeEnum.WINDOW;
+               // door.PredefinedType = IfcWindowTypeEnum.WINDOW;
                 // door.OperationType = IfcDoorTypeOperationEnum.DOUBLE_SWING_LEFT;
                 door.OverallHeight = 400;
                 door.OverallWidth = 400;
-                door.PartitioningType = IfcWindowTypePartitioningEnum.SINGLE_PANEL;
+              //  door.PartitioningType = IfcWindowTypePartitioningEnum.SINGLE_PANEL;
 
-                var windowType = model.Instances.New<IfcWindowType>();
-                windowType.Name = "Window";
-                windowType.Description = "ddddd";
-                windowType.PartitioningType = IfcWindowTypePartitioningEnum.SINGLE_PANEL;
-                var windowType_Rel = model.Instances.New<IfcRelDefinesByType>();
-                windowType_Rel.RelatedObjects.Add(door);
-                windowType_Rel.RelatingType = windowType;
+                //var windowType = model.Instances.New<IfcWindowType>();
+                //windowType.Name = "Window";
+                //windowType.Description = "ddddd";
+                //windowType.PartitioningType = IfcWindowTypePartitioningEnum.SINGLE_PANEL;
+                //var windowType_Rel = model.Instances.New<IfcRelDefinesByType>();
+                //windowType_Rel.RelatedObjects.Add(door);
+                //windowType_Rel.RelatingType = windowType;
                 var lp_door = model.Instances.New<IfcLocalPlacement>();
                 var wallplace = wall.ObjectPlacement;
                 var ax3D_door = model.Instances.New<IfcAxis2Placement3D>();
@@ -1091,7 +905,7 @@ namespace XBIMApp
                 ////////////////////////////////////////////////////////////////////
                 var m_OpeningEle = model.Instances.New<IfcOpeningElement>();
                 m_OpeningEle.Name = "My Openings";
-                m_OpeningEle.PredefinedType = IfcOpeningElementTypeEnum.OPENING;
+               // m_OpeningEle.PredefinedType = IfcOpeningElementTypeEnum.OPENING;
 
                 var rectOpening = model.Instances.New<IfcRectangleProfileDef>();
                 rectOpening.ProfileType = IfcProfileTypeEnum.AREA;
@@ -1133,19 +947,19 @@ namespace XBIMApp
                 var material100 = model.Instances.New<IfcMaterial>();
                 material100.Name = "Wood";
 
-                var n_ifcMaterialConstituentSet = model.Instances.New<IfcMaterialConstituentSet>();
-                var n_ifcMaterialConstituent = model.Instances.New<IfcMaterialConstituent>();
-                n_ifcMaterialConstituent.Category = "Framing";
-                n_ifcMaterialConstituent.Material = material98;
-                var n_ifcMaterialConstituent100 = model.Instances.New<IfcMaterialConstituent>();
-                n_ifcMaterialConstituent100.Category = "Framing";
-                n_ifcMaterialConstituent100.Material = material100;
-                //n_ifcMaterialConstituent.Model = door;
-                n_ifcMaterialConstituentSet.MaterialConstituents.Add(n_ifcMaterialConstituent);
-                n_ifcMaterialConstituentSet.MaterialConstituents.Add(n_ifcMaterialConstituent100);
-                var ifcRelAssociatesMaterial = model.Instances.New<IfcRelAssociatesMaterial>();
-                ifcRelAssociatesMaterial.RelatingMaterial = n_ifcMaterialConstituentSet;
-                ifcRelAssociatesMaterial.RelatedObjects.Add(door);
+                //var n_ifcMaterialConstituentSet = model.Instances.New<IfcMaterialConstituentSet>();
+                //var n_ifcMaterialConstituent = model.Instances.New<IfcMaterialConstituent>();
+                //n_ifcMaterialConstituent.Category = "Framing";
+                //n_ifcMaterialConstituent.Material = material98;
+                //var n_ifcMaterialConstituent100 = model.Instances.New<IfcMaterialConstituent>();
+                //n_ifcMaterialConstituent100.Category = "Framing";
+                //n_ifcMaterialConstituent100.Material = material100;
+                ////n_ifcMaterialConstituent.Model = door;
+                //n_ifcMaterialConstituentSet.MaterialConstituents.Add(n_ifcMaterialConstituent);
+                //n_ifcMaterialConstituentSet.MaterialConstituents.Add(n_ifcMaterialConstituent100);
+                //var ifcRelAssociatesMaterial = model.Instances.New<IfcRelAssociatesMaterial>();
+                //ifcRelAssociatesMaterial.RelatingMaterial = n_ifcMaterialConstituentSet;
+                //ifcRelAssociatesMaterial.RelatedObjects.Add(door);
 
                 var ifcPropertySingleValue = model.Instances.New<IfcPropertySingleValue>(psv =>
                 {
