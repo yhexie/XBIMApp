@@ -16,7 +16,7 @@ namespace XBIMApp
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new axForm());
+            Application.Run(new main());
             // Application.Run(new Form1());
             //Application.Run(new Ifc2x3frm());
         }

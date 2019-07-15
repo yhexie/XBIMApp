@@ -59,5 +59,25 @@ namespace XBIMApp.Properties {
                 resourceCulture = value;
             }
         }
+        
+        /// <summary>
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
+        /// </summary>
+        internal static System.Drawing.Bitmap _3D_printer_46_663573085847px_1166645_easyicon_net {
+            get {
+                object obj = ResourceManager.GetObject("3D_printer_46.663573085847px_1166645_easyicon.net", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
+        /// </summary>
+        internal static System.Drawing.Bitmap _3D_printer_71_441860465116px_1166648_easyicon_net {
+            get {
+                object obj = ResourceManager.GetObject("3D_printer_71.441860465116px_1166648_easyicon.net", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
     }
 }
