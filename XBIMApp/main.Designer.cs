@@ -36,6 +36,9 @@
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
             this.toolStripButton2 = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.TspCreateIFC2 = new System.Windows.Forms.ToolStripMenuItem();
+            this.tspCreateSlabToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -55,6 +58,9 @@
             // 
             this.创建ToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.TspCreateIFC,
+            this.TspCreateIFC2,
+            this.tspCreateSlabToolStripMenuItem,
+            this.toolStripSeparator1,
             this.TspMergeIFC});
             this.创建ToolStripMenuItem.Name = "创建ToolStripMenuItem";
             this.创建ToolStripMenuItem.Size = new System.Drawing.Size(103, 24);
@@ -63,14 +69,14 @@
             // TspCreateIFC
             // 
             this.TspCreateIFC.Name = "TspCreateIFC";
-            this.TspCreateIFC.Size = new System.Drawing.Size(196, 26);
+            this.TspCreateIFC.Size = new System.Drawing.Size(271, 26);
             this.TspCreateIFC.Text = "根据门窗创建IFC";
             this.TspCreateIFC.Click += new System.EventHandler(this.TspCreateIFC_Click);
             // 
             // TspMergeIFC
             // 
             this.TspMergeIFC.Name = "TspMergeIFC";
-            this.TspMergeIFC.Size = new System.Drawing.Size(196, 26);
+            this.TspMergeIFC.Size = new System.Drawing.Size(271, 26);
             this.TspMergeIFC.Text = "合并2个IFC";
             this.TspMergeIFC.Click += new System.EventHandler(this.TspMergeIFC_Click);
             // 
@@ -104,6 +110,25 @@
             this.toolStripButton2.Size = new System.Drawing.Size(24, 24);
             this.toolStripButton2.Text = "toolStripButton2";
             // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(268, 6);
+            // 
+            // TspCreateIFC2
+            // 
+            this.TspCreateIFC2.Name = "TspCreateIFC2";
+            this.TspCreateIFC2.Size = new System.Drawing.Size(271, 26);
+            this.TspCreateIFC2.Text = "根据门窗创建IFC（带字段）";
+            this.TspCreateIFC2.Click += new System.EventHandler(this.TspCreateIFC2_Click);
+            // 
+            // tspCreateSlabToolStripMenuItem
+            // 
+            this.tspCreateSlabToolStripMenuItem.Name = "tspCreateSlabToolStripMenuItem";
+            this.tspCreateSlabToolStripMenuItem.Size = new System.Drawing.Size(271, 26);
+            this.tspCreateSlabToolStripMenuItem.Text = "创建楼板";
+            this.tspCreateSlabToolStripMenuItem.Click += new System.EventHandler(this.tspCreateSlabToolStripMenuItem_Click);
+            // 
             // main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
@@ -134,5 +159,8 @@
         private System.Windows.Forms.ToolStrip toolStrip1;
         private System.Windows.Forms.ToolStripButton toolStripButton1;
         private System.Windows.Forms.ToolStripButton toolStripButton2;
+        private System.Windows.Forms.ToolStripMenuItem TspCreateIFC2;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+        private System.Windows.Forms.ToolStripMenuItem tspCreateSlabToolStripMenuItem;
     }
 }

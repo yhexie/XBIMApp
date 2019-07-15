@@ -65,5 +65,26 @@ namespace XBIMApp
             }
             
         }
+
+        private void TspCreateIFC2_Click(object sender, EventArgs e)
+        {
+            axFormField frm = new axFormField();
+            frm.ShowDialog();
+        }
+
+        private void tspCreateSlabToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog dlg = new OpenFileDialog();
+            dlg.Title = "打开墙线文件";
+            dlg.Filter = "(*.shp)|*.shp";
+            if (dlg.ShowDialog() == DialogResult.OK && dlg.FileName != String.Empty)
+            {
+                
+                String wallFileName = dlg.FileName;
+                AxIndoorIfcCreatorSlab slab = new AxIndoorIfcCreatorSlab();
+                slab.setSlabFile(wallFileName);
+                slab.CreateBuilding("slab.ifc");
+            }
+        }
     }
 }

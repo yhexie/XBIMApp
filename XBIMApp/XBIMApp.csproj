@@ -107,9 +107,17 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AxDoor.cs" />
+    <Compile Include="axFormField.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="axFormField.Designer.cs">
+      <DependentUpon>axFormField.cs</DependentUpon>
+    </Compile>
     <Compile Include="AxIndoorIFCCreator.cs" />
+    <Compile Include="AxIndoorIfcCreatorField.cs" />
     <Compile Include="AxIndoorIfcCreatorEx.cs" />
     <Compile Include="AxIndoorIfcCreatorIfc2x3.cs" />
+    <Compile Include="AxIndoorIfcCreatorSlab.cs" />
     <Compile Include="AxMath.cs" />
     <Compile Include="AxPolyline.cs" />
     <Compile Include="AxSegment2.cs" />
@@ -128,11 +136,11 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
-    <Compile Include="Form2.cs">
+    <Compile Include="axForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Form2.Designer.cs">
-      <DependentUpon>Form2.cs</DependentUpon>
+    <Compile Include="axForm.Designer.cs">
+      <DependentUpon>axForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Ifc2x3frm.cs">
       <SubType>Form</SubType>
@@ -148,14 +156,17 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="axFormField.resx">
+      <DependentUpon>axFormField.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="dlgMergeTwoIfc.resx">
       <DependentUpon>dlgMergeTwoIfc.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Form2.resx">
-      <DependentUpon>Form2.cs</DependentUpon>
+    <EmbeddedResource Include="axForm.resx">
+      <DependentUpon>axForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Ifc2x3frm.resx">
       <DependentUpon>Ifc2x3frm.cs</DependentUpon>
