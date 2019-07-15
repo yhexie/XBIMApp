@@ -79,7 +79,7 @@ namespace XBIMApp
             dlg.Filter = "(*.shp)|*.shp";
             if (dlg.ShowDialog() == DialogResult.OK && dlg.FileName != String.Empty)
             {
-                
+                //带字段CeilingZ和FloorZ，特殊之处在于FloorZ大于CeilingZ
                 String wallFileName = dlg.FileName;
                 AxIndoorIfcCreatorSlab slab = new AxIndoorIfcCreatorSlab();
                 slab.setSlabFile(wallFileName);

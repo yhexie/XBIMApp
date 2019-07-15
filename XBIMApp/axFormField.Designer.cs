@@ -66,9 +66,9 @@
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(16, 12);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(121, 15);
+            this.label1.Size = new System.Drawing.Size(372, 15);
             this.label1.TabIndex = 7;
-            this.label1.Text = "选择shp墙线文件";
+            this.label1.Text = "选择shp墙线文件（带字段CeilingZ,FloorZ,IsDoor）";
             // 
             // textBox1
             // 
@@ -92,9 +92,9 @@
             this.label2.AutoSize = true;
             this.label2.Location = new System.Drawing.Point(16, 69);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(121, 15);
+            this.label2.Size = new System.Drawing.Size(275, 15);
             this.label2.TabIndex = 7;
-            this.label2.Text = "选择shp门窗文件";
+            this.label2.Text = "选择shp门窗文件（带字段MinZ，MaxZ）";
             // 
             // textBox2
             // 
@@ -152,7 +152,7 @@
             this.checkBox1.Text = "生成门窗";
             this.checkBox1.UseVisualStyleBackColor = true;
             // 
-            // axForm
+            // axFormField
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -168,7 +168,7 @@
             this.Controls.Add(this.textBox1);
             this.Controls.Add(this.btnChooseDoor);
             this.Controls.Add(this.btnChooseWallLines);
-            this.Name = "axForm";
+            this.Name = "axFormField";
             this.Text = "IFC模型生成";
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
             this.ResumeLayout(false);

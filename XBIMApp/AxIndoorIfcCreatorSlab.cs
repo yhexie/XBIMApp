@@ -114,8 +114,8 @@ namespace XBIMApp
                     AxWallLine wall = new AxWallLine();
                     wall.WallId = 1000 + i;
                     wall.m_Polyline = plline;
-                    wall.m_MaxZ = ceilingZ * 1000;
-                    wall.m_MinZ = floorZ * 1000;
+                    wall.m_MaxZ = floorZ * 1000;
+                    wall.m_MinZ = ceilingZ * 1000;
                     wall.m_Thickness = 150;
                     m_WallPolylines.Add(wall);
                 }
