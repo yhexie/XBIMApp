@@ -32,13 +32,15 @@
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.创建ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.TspCreateIFC = new System.Windows.Forms.ToolStripMenuItem();
+            this.TspCreateIFC2 = new System.Windows.Forms.ToolStripMenuItem();
+            this.tspCreateSlabToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.TspMergeIFC = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
             this.toolStripButton2 = new System.Windows.Forms.ToolStripButton();
-            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            this.TspCreateIFC2 = new System.Windows.Forms.ToolStripMenuItem();
-            this.tspCreateSlabToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.label1 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
             this.menuStrip1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -72,6 +74,25 @@
             this.TspCreateIFC.Size = new System.Drawing.Size(271, 26);
             this.TspCreateIFC.Text = "根据门窗创建IFC";
             this.TspCreateIFC.Click += new System.EventHandler(this.TspCreateIFC_Click);
+            // 
+            // TspCreateIFC2
+            // 
+            this.TspCreateIFC2.Name = "TspCreateIFC2";
+            this.TspCreateIFC2.Size = new System.Drawing.Size(271, 26);
+            this.TspCreateIFC2.Text = "根据门窗创建IFC（带字段）";
+            this.TspCreateIFC2.Click += new System.EventHandler(this.TspCreateIFC2_Click);
+            // 
+            // tspCreateSlabToolStripMenuItem
+            // 
+            this.tspCreateSlabToolStripMenuItem.Name = "tspCreateSlabToolStripMenuItem";
+            this.tspCreateSlabToolStripMenuItem.Size = new System.Drawing.Size(271, 26);
+            this.tspCreateSlabToolStripMenuItem.Text = "创建楼板";
+            this.tspCreateSlabToolStripMenuItem.Click += new System.EventHandler(this.tspCreateSlabToolStripMenuItem_Click);
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(268, 6);
             // 
             // TspMergeIFC
             // 
@@ -110,30 +131,37 @@
             this.toolStripButton2.Size = new System.Drawing.Size(24, 24);
             this.toolStripButton2.Text = "toolStripButton2";
             // 
-            // toolStripSeparator1
+            // label1
             // 
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(268, 6);
+            this.label1.AutoSize = true;
+            this.label1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.label1.Font = new System.Drawing.Font("楷体", 18F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label1.Location = new System.Drawing.Point(160, 150);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(418, 30);
+            this.label1.TabIndex = 2;
+            this.label1.Text = "欢迎使用IFC模型处理工具箱！";
+            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // TspCreateIFC2
+            // label2
             // 
-            this.TspCreateIFC2.Name = "TspCreateIFC2";
-            this.TspCreateIFC2.Size = new System.Drawing.Size(271, 26);
-            this.TspCreateIFC2.Text = "根据门窗创建IFC（带字段）";
-            this.TspCreateIFC2.Click += new System.EventHandler(this.TspCreateIFC2_Click);
-            // 
-            // tspCreateSlabToolStripMenuItem
-            // 
-            this.tspCreateSlabToolStripMenuItem.Name = "tspCreateSlabToolStripMenuItem";
-            this.tspCreateSlabToolStripMenuItem.Size = new System.Drawing.Size(271, 26);
-            this.tspCreateSlabToolStripMenuItem.Text = "创建楼板";
-            this.tspCreateSlabToolStripMenuItem.Click += new System.EventHandler(this.tspCreateSlabToolStripMenuItem_Click);
+            this.label2.AutoSize = true;
+            this.label2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.label2.Font = new System.Drawing.Font("楷体", 12F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label2.Location = new System.Drawing.Point(261, 214);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(409, 20);
+            this.label2.TabIndex = 2;
+            this.label2.Text = "作者：yhexie      邮箱： yhlx125@163.com";
+            this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(750, 427);
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.label1);
             this.Controls.Add(this.toolStrip1);
             this.Controls.Add(this.menuStrip1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
@@ -162,5 +190,7 @@
         private System.Windows.Forms.ToolStripMenuItem TspCreateIFC2;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripMenuItem tspCreateSlabToolStripMenuItem;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label label2;
     }
 }

@@ -32,6 +32,8 @@ namespace XBIMApp
             {
                 String fileName1 = dlg.ifcFileName1;
                 String fileName2 = dlg.ifcFileName2;
+                String fileName3 = dlg.ifcFileName3;
+                String fileName4 = dlg.ifcFileName4;
                 var editor = new XbimEditorCredentials
                 {
                     ApplicationDevelopersName = "Yhexie",
@@ -46,9 +48,16 @@ namespace XBIMApp
 
                 using (var federation = IfcStore.Create(editor, IfcSchemaVersion.Ifc4, XbimStoreType.InMemoryModel))
                 {
-                    federation.AddModelReference(fileName1, "Bob The Builder", "Original Constructor"); //IFC4 文件
-                    federation.AddModelReference(fileName2, "Tyna", "Extensions Builder"); //IFC2x3  文件
-
+                    federation.AddModelReference(fileName1, "WHU", "Original Constructor"); //IFC4 文件
+                    federation.AddModelReference(fileName2, "WHU", "Extensions Builder"); //IFC2x3  文件
+                    if (fileName3!=String.Empty)
+                    {
+                        federation.AddModelReference(fileName3, "WHU", "Extensions Builder"); //IFC2x3  文件
+                    }
+                    if (fileName4 != String.Empty)
+                    {
+                        federation.AddModelReference(fileName4, "WHU", "Extensions Builder"); //IFC2x3  文件
+                    }
                     Console.WriteLine("Model is federation: {federation.IsFederation}");
                     Console.WriteLine("Number of overall entities: {federation.FederatedInstances.Count}");
                     Console.WriteLine("Number of walls: {federation.FederatedInstances.CountOf<IIfcWall>()}");
